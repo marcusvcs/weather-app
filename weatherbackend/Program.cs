@@ -1,3 +1,5 @@
+using WeatherBackend;
+
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
@@ -5,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpClient();
 
 builder.Services.AddCors(options =>
 {
@@ -29,24 +32,26 @@ app.UseHttpsRedirection();
 
 app.UseCors(MyAllowSpecificOrigins);
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
 
-app.MapGet("/weatherforecast", () =>
+app.MapGet("/currentweather", async (string locationKey, IHttpClientFactory httpClientFactory) =>
 {
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-       new WeatherForecast
-       (
-           DateTime.Now.AddDays(index),
-           Random.Shared.Next(-20, 55),
-           summaries[Random.Shared.Next(summaries.Length)]
-       ))
-        .ToArray();
-    return forecast;
+    var client = httpClientFactory.CreateClient();
+    var weatherService = new WeatherService(client);
+    var currentWeather = await weatherService.GetCurrentWeather(locationKey);
+
+    return currentWeather;
 })
-.WithName("GetWeatherForecast");
+.WithName("GetCurrentWeather");
+
+app.MapGet("/location", async (string latitude, string longitude, IHttpClientFactory httpClientFactory) =>
+{
+    var client = httpClientFactory.CreateClient();
+    var weatherService = new WeatherService(client);
+    var currentWeather = await weatherService.GetLocation(latitude, longitude);
+
+    return currentWeather;
+})
+.WithName("GetCurrentLocation");
 
 app.Run();
 
