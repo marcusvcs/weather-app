@@ -53,9 +53,14 @@ app.MapGet("/location", async (string latitude, string longitude, IHttpClientFac
 })
 .WithName("GetCurrentLocation");
 
-app.Run();
-
-internal record WeatherForecast(DateTime Date, int TemperatureC, string? Summary)
+app.MapGet("/dailyforecast", async (string locationKey, IHttpClientFactory httpClientFactory) =>
 {
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+    var client = httpClientFactory.CreateClient();
+    var weatherService = new WeatherService(client);
+    var dailyForecast = await weatherService.GetDailyForecast(locationKey);
+
+    return dailyForecast;
+})
+.WithName("GetDailyForecast");
+
+app.Run();

@@ -43,11 +43,11 @@ namespace WeatherBackend
 
         }
 
-        public async Task<CurrentWeather?> GetCurrentWeather(string locationKey)
+        public async Task<CurrentWeatherModel?> GetCurrentWeather(string locationKey)
         {
 
             _httpClient.BaseAddress = new Uri("http://dataservice.accuweather.com/currentconditions/v1/");
-            string urlParameters = $"{locationKey}?apikey={Environment.GetEnvironmentVariable("WEATHER_API_KEY")}";
+            string urlParameters = $"{locationKey}?apikey={Environment.GetEnvironmentVariable("WEATHER_API_KEY")}&details=true";
 
             var response = await _httpClient.GetAsync(urlParameters);
             JsonSerializerOptions serializerOptions = new();
@@ -57,7 +57,42 @@ namespace WeatherBackend
                 var results = await response.Content.ReadFromJsonAsync<List<CurrentWeather>>(serializerOptions);
                 if (results != null)
                 {
-                    return results.FirstOrDefault();
+                    var fullResult =  results.FirstOrDefault();
+                    if (fullResult != null)
+                    {
+                        return new CurrentWeatherModel()
+                        {
+                            LocalObservationDateTime = fullResult.LocalObservationDateTime,
+                            TemperatureC = fullResult.Temperature.Metric.Value,
+                            TemperatureF = fullResult.Temperature.Imperial.Value,
+                            WeatherText = fullResult.WeatherText,
+                            WeatherIcon = fullResult.WeatherIcon,
+                            RelativeHumidity = fullResult.RelativeHumidity,
+                            WindM = fullResult.Wind.Speed.Metric.Value,
+                            WindI = fullResult.Wind.Speed.Imperial.Value    
+                        };
+                    }
+                }
+            }
+            return null;
+
+        }
+
+        public async Task<DailyForecastModel?> GetDailyForecast(string locationKey)
+        {
+
+            _httpClient.BaseAddress = new Uri("http://dataservice.accuweather.com/forecasts/v1/daily/5day/");
+            string urlParameters = $"{locationKey}?apikey={Environment.GetEnvironmentVariable("WEATHER_API_KEY")}";
+
+            var response = await _httpClient.GetAsync(urlParameters);
+            JsonSerializerOptions serializerOptions = new();
+            serializerOptions.IncludeFields = true;
+            if (response != null && response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<DailyForecastModel>(serializerOptions);
+                if (result != null)
+                {
+                    return result;
                 }
             }
             return null;

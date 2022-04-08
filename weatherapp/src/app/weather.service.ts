@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { LocationModel } from './location.model'
+import { CurrentWeatherModel, DailyForecastModel, LocationModel } from './weather.model'
 
 
 @Injectable({
@@ -14,5 +14,14 @@ export class WeatherService {
   public getLocation(latitude: number, longitude: number) {
 
     return this.http.get<LocationModel>(`/location?latitude=${latitude}&longitude=${longitude}`)
+  }
+  
+  public getCurrentWeather(locationKey:number) {
+
+    return this.http.get<CurrentWeatherModel>(`/currentweather?locationKey=${locationKey}`)
+  }
+  public getDailyForecast(locationKey: number) {
+
+    return this.http.get<DailyForecastModel>(`/dailyforecast?locationKey=${locationKey}`)
   }
 }

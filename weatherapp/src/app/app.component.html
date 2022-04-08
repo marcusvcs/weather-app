@@ -1,24 +1,31 @@
 <mat-card class="mat-elevation-z5">
   <mat-card-header>
-    <mat-card-title>London's weather</mat-card-title>
-    <mat-card-subtitle>Today: July 10, 2020</mat-card-subtitle>
+    <mat-card-title>{{locationModel.city}}, {{locationModel.state}}, {{locationModel.country}}</mat-card-title>
+    <mat-card-subtitle>{{currentWeatherModel.localObservationDateTime | date:'fullDate'}}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-
+    <div class="flex-row">
+      <div class="temp">
+        <span class="big-text">{{currentWeatherModel.temperatureC}}° C</span>
+        <img src="https://developer.accuweather.com/sites/default/files/0{{currentWeatherModel.weatherIcon}}-s.png" />
+        <span class="medium-text">{{currentWeatherModel.weatherText}}</span>
+      </div>
+      <div class="outlook">
+        <span class="medium-text">Humidity: {{currentWeatherModel.relativeHumidity}}%</span>
+        <span class="medium-text">Wind: {{currentWeatherModel.windM}}</span>
+      </div>
+    </div>
   </mat-card-content>
-  <mat-card-actions>
-    <button mat-button>LIKE</button>
-    <button mat-button>SHARE</button>
-  </mat-card-actions>
+  <mat-card-content class="content-forecast">
+    <div class="flex-wrap">
+      <div class="forecast" *ngFor="let dailyForecast of dailyForecastModel.dailyForecasts">
+        <span>{{dailyForecast.date | date:'d'}}</span>
+        <img src="https://developer.accuweather.com/sites/default/files/0{{dailyForecast.day.icon}}-s.png" />
+        <span>{{dailyForecast.temperature.minimum.value}}°</span>
+        <span>{{dailyForecast.temperature.maximum.value}}º</span>
+        <span>{{dailyForecast.day.iconPhrase}}º</span>
+      </div>
+     
+    </div>
+  </mat-card-content>
 </mat-card>
-<div class="flex-row">
-  <div class="temp">
-    <span class="big-text">17 C</span>
-    <span>Feels like </span>
-    <span>12 C</span>
-  </div>
-  <div class="outlook">
-    <img src="http://openweathermap.org/img/wn/02d@2x.png" />
-    <span>Few Clouds</span>
-  </div>
-</div>

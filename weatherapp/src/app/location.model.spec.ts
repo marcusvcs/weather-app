@@ -1,4 +1,4 @@
-import { LocationModel } from './location.model';
+import { LocationModel } from './weather.model';
 
 describe('Location', () => {
   it('should create an instance', () => {
