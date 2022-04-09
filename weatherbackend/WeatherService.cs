@@ -1,27 +1,26 @@
 ﻿using Newtonsoft.Json;
 using System.Text.Json;
-using weatherbackend.Model;
 using WeatherBackend.Model;
 
 namespace WeatherBackend
 {
-    public class WeatherService
+    public class WeatherService : IWeatherService
     {
-        private readonly HttpClient _httpClient;
+        private readonly IHttpClientFactory _httpClientFactory;
 
 
-        public WeatherService(HttpClient httpClient)
+        public WeatherService(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = httpClient;
+            _httpClientFactory = httpClientFactory;
         }
 
         public async Task<LocationModel?> GetLocation(string latitude, string longitude)
         {
-
-            _httpClient.BaseAddress = new Uri("http://dataservice.accuweather.com/locations/v1/cities/geoposition/search");
+            var httpClient = _httpClientFactory.CreateClient();
+            httpClient.BaseAddress = new Uri("http://dataservice.accuweather.com/locations/v1/cities/geoposition/search");
             string urlParameters = $"?q={latitude},{longitude}&apikey={Environment.GetEnvironmentVariable("WEATHER_API_KEY")}";
 
-            var response = await _httpClient.GetAsync(urlParameters);
+            var response = await httpClient.GetAsync(urlParameters);
             JsonSerializerOptions serializerOptions = new();
             serializerOptions.IncludeFields = true;
             if (response != null && response.IsSuccessStatusCode)
@@ -45,11 +44,11 @@ namespace WeatherBackend
 
         public async Task<CurrentWeatherModel?> GetCurrentWeather(string locationKey)
         {
-
-            _httpClient.BaseAddress = new Uri("http://dataservice.accuweather.com/currentconditions/v1/");
+            var httpClient = _httpClientFactory.CreateClient();
+            httpClient.BaseAddress = new Uri("http://dataservice.accuweather.com/currentconditions/v1/");
             string urlParameters = $"{locationKey}?apikey={Environment.GetEnvironmentVariable("WEATHER_API_KEY")}&details=true";
 
-            var response = await _httpClient.GetAsync(urlParameters);
+            var response = await httpClient.GetAsync(urlParameters);
             JsonSerializerOptions serializerOptions = new();
             serializerOptions.IncludeFields = true;
             if (response != null && response.IsSuccessStatusCode)
@@ -57,7 +56,7 @@ namespace WeatherBackend
                 var results = await response.Content.ReadFromJsonAsync<List<CurrentWeather>>(serializerOptions);
                 if (results != null)
                 {
-                    var fullResult =  results.FirstOrDefault();
+                    var fullResult = results.FirstOrDefault();
                     if (fullResult != null)
                     {
                         return new CurrentWeatherModel()
@@ -69,7 +68,7 @@ namespace WeatherBackend
                             WeatherIcon = fullResult.WeatherIcon,
                             RelativeHumidity = fullResult.RelativeHumidity,
                             WindM = fullResult.Wind.Speed.Metric.Value,
-                            WindI = fullResult.Wind.Speed.Imperial.Value    
+                            WindI = fullResult.Wind.Speed.Imperial.Value
                         };
                     }
                 }
@@ -80,11 +79,11 @@ namespace WeatherBackend
 
         public async Task<DailyForecastModel?> GetDailyForecast(string locationKey)
         {
-
-            _httpClient.BaseAddress = new Uri("http://dataservice.accuweather.com/forecasts/v1/daily/5day/");
+            var httpClient = _httpClientFactory.CreateClient();
+            httpClient.BaseAddress = new Uri("http://dataservice.accuweather.com/forecasts/v1/daily/5day/");
             string urlParameters = $"{locationKey}?apikey={Environment.GetEnvironmentVariable("WEATHER_API_KEY")}";
 
-            var response = await _httpClient.GetAsync(urlParameters);
+            var response = await httpClient.GetAsync(urlParameters);
             JsonSerializerOptions serializerOptions = new();
             serializerOptions.IncludeFields = true;
             if (response != null && response.IsSuccessStatusCode)

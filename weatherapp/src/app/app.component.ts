@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
       this.metricOrImperial = "metric";
     }
 
-    /*
+    
     this.geolocation$.pipe(take(1)).subscribe(position => {
 
       this.weatherService.getLocation(position.coords.latitude, position.coords.longitude).subscribe(loc => {
@@ -46,10 +46,10 @@ export class AppComponent implements OnInit {
 
       });
     });
-    */
+    
 
-    this.setUnits();
-    this.convertUnits(true);
+    //this.setUnits();
+    //this.convertUnits(true);
 
   }
   title = 'Weather on your City';

@@ -21,7 +21,7 @@
     <div class="flex-wrap">
       <div class="forecast" *ngFor="let dailyForecast of dailyForecastModel.dailyForecasts">
         <span class="medium-text">{{dailyForecast.date | date:'d'}}</span>
-        <img src="https://developer.accuweather.com/sites/default/files/0{{dailyForecast.day.icon}}-s.png" />
+        <img src="https://developer.accuweather.com/sites/default/files/{{dailyForecast.day.icon.toString().padStart(2,'0')}}-s.png" />
         <span>{{dailyForecast.temperature.minimum.value}}°</span>
         <span>{{dailyForecast.temperature.maximum.value}}º</span>
       </div>

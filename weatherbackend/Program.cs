@@ -8,12 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
+builder.Services.AddScoped<IWeatherService, WeatherService>();
 
-builder.Services.AddCors(options =>
-{
+builder.Services.AddCors(options => {
     options.AddPolicy(name: MyAllowSpecificOrigins,
-                      policy =>
-                      {
+                      policy => {
                           policy.WithOrigins("https://localhost:4200"
                                               );
                       });
@@ -35,30 +34,23 @@ app.UseCors(MyAllowSpecificOrigins);
 app.UseFileServer();
 
 
-app.MapGet("/currentweather", async (string locationKey, IHttpClientFactory httpClientFactory) =>
-{
-    var client = httpClientFactory.CreateClient();
-    var weatherService = new WeatherService(client);
+app.MapGet("/currentweather", async (string locationKey, IWeatherService weatherService) => {
+
     var currentWeather = await weatherService.GetCurrentWeather(locationKey);
 
     return currentWeather;
 })
 .WithName("GetCurrentWeather");
 
-app.MapGet("/location", async (string latitude, string longitude, IHttpClientFactory httpClientFactory) =>
-{
-    var client = httpClientFactory.CreateClient();
-    var weatherService = new WeatherService(client);
-    var currentWeather = await weatherService.GetLocation(latitude, longitude);
+app.MapGet("/location", async (string latitude, string longitude, IWeatherService weatherService) => {
+    var location = await weatherService.GetLocation(latitude, longitude);
 
-    return currentWeather;
+    return location;
 })
 .WithName("GetCurrentLocation");
 
-app.MapGet("/dailyforecast", async (string locationKey, IHttpClientFactory httpClientFactory) =>
-{
-    var client = httpClientFactory.CreateClient();
-    var weatherService = new WeatherService(client);
+app.MapGet("/dailyforecast", async (string locationKey, IWeatherService weatherService) => {
+
     var dailyForecast = await weatherService.GetDailyForecast(locationKey);
 
     return dailyForecast;
