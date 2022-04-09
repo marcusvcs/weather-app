@@ -28,9 +28,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//Will be configured outside the application
+//app.UseHttpsRedirection();
 
 app.UseCors(MyAllowSpecificOrigins);
+app.UseFileServer();
 
 
 app.MapGet("/currentweather", async (string locationKey, IHttpClientFactory httpClientFactory) =>

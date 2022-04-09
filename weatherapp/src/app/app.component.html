@@ -1,4 +1,4 @@
-<mat-card class="mat-elevation-z5">
+<mat-card class="mat-elevation-z5 full">
   <mat-card-header>
     <mat-card-title>{{locationModel.city}}, {{locationModel.state}}, {{locationModel.country}}</mat-card-title>
     <mat-card-subtitle>{{currentWeatherModel.localObservationDateTime | date:'fullDate'}}</mat-card-subtitle>
@@ -6,26 +6,26 @@
   <mat-card-content>
     <div class="flex-row">
       <div class="temp">
-        <span class="big-text">{{currentWeatherModel.temperatureC}}° C</span>
+        <span class="big-text">{{temperature}}° {{temperatureUnit}}</span>
         <img src="https://developer.accuweather.com/sites/default/files/0{{currentWeatherModel.weatherIcon}}-s.png" />
         <span class="medium-text">{{currentWeatherModel.weatherText}}</span>
       </div>
       <div class="outlook">
         <span class="medium-text">Humidity: {{currentWeatherModel.relativeHumidity}}%</span>
-        <span class="medium-text">Wind: {{currentWeatherModel.windM}}</span>
+        <span class="medium-text">Wind: {{windSpeed}} {{windSpeedUnit}}</span>
+        <span class="big-text"><a href="#" (click)="changeToCelsius()">C</a> | <a href="#" (click)="changeToFahrenheit()">F</a></span>
       </div>
     </div>
   </mat-card-content>
-  <mat-card-content class="content-forecast">
+  
     <div class="flex-wrap">
       <div class="forecast" *ngFor="let dailyForecast of dailyForecastModel.dailyForecasts">
-        <span>{{dailyForecast.date | date:'d'}}</span>
+        <span class="medium-text">{{dailyForecast.date | date:'d'}}</span>
         <img src="https://developer.accuweather.com/sites/default/files/0{{dailyForecast.day.icon}}-s.png" />
         <span>{{dailyForecast.temperature.minimum.value}}°</span>
         <span>{{dailyForecast.temperature.maximum.value}}º</span>
-        <span>{{dailyForecast.day.iconPhrase}}º</span>
       </div>
      
     </div>
-  </mat-card-content>
+  
 </mat-card>

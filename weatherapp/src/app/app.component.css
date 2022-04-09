@@ -2,6 +2,10 @@
   text-align:center;
 }
 
+.full{
+    height: 100%;
+}
+
 .flex-row {
   display: flex;
   flex-direction: row;
@@ -51,6 +55,8 @@ div {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  overflow: auto;
+  overflow-x: hidden;
 }
 
 .big-text {
