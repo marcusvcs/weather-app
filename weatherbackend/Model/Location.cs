@@ -1,6 +1,6 @@
 ﻿namespace WeatherBackend.Model
 {
-
+    #region Classes generated from Copy JSON as Class
     public class Location
     {
         public int Version { get; set; }
@@ -87,7 +87,11 @@
         public string? LocalizedName { get; set; }
         public string? EnglishName { get; set; }
     }
+    #endregion
 
+    /// <summary>
+    /// Class that is returned by the API /location
+    /// </summary>
     public class LocationModel
     {
         public string? City { get; set; }

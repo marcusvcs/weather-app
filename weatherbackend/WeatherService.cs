@@ -1,19 +1,27 @@
-﻿using Newtonsoft.Json;
-using System.Text.Json;
+﻿using System.Text.Json;
 using WeatherBackend.Model;
 
 namespace WeatherBackend
 {
+    /// <summary>
+    /// Class that gets all the weather data from the AccuWeather API
+    /// </summary>
     public class WeatherService : IWeatherService
     {
+        // Injected by DI
         private readonly IHttpClientFactory _httpClientFactory;
-
 
         public WeatherService(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
         }
-
+        
+        /// <summary>
+        /// Get location data from openweathermap.org
+        /// </summary>
+        /// <param name="latitude">Latitude</param>
+        /// <param name="longitude">Longitude</param>
+        /// <returns></returns>
         public async Task<LocationModel?> GetLocation(string latitude, string longitude)
         {
             var httpClient = _httpClientFactory.CreateClient();
@@ -41,7 +49,12 @@ namespace WeatherBackend
             return null;
 
         }
-
+        
+        /// <summary>
+        /// Gets the weather for a specific location
+        /// </summary>
+        /// <param name="locationKey">The location key that is received in the GetLocation method</param>
+        /// <returns></returns>
         public async Task<CurrentWeatherModel?> GetCurrentWeather(string locationKey)
         {
             var httpClient = _httpClientFactory.CreateClient();
@@ -77,6 +90,11 @@ namespace WeatherBackend
 
         }
 
+        /// <summary>
+        /// Get the forecast for the next 5 days
+        /// </summary>
+        /// <param name="locationKey">The location key that is received in the GetLocation method</param>
+        /// <returns></returns>
         public async Task<DailyForecastModel?> GetDailyForecast(string locationKey)
         {
             var httpClient = _httpClientFactory.CreateClient();

@@ -5,6 +5,7 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
+# Building frontend
 FROM node:lts-alpine as build-frontend
 RUN mkdir -p /app
 WORKDIR /app
@@ -14,6 +15,7 @@ COPY ./weatherapp /app
 RUN rm src/proxy.conf.js
 RUN npm run build --prod
 
+# Building backend, copying frontend build
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["weatherbackend/weatherbackend.csproj", "weatherbackend/"]
@@ -23,9 +25,11 @@ COPY --from=build-frontend /app/dist/weatherapp ./weatherbackend/wwwroot
 WORKDIR "/src/weatherbackend"
 RUN dotnet build "weatherbackend.csproj" -c Release -o /app/build
 
+# Publish
 FROM build AS publish
 RUN dotnet publish "weatherbackend.csproj" -c Release -o /app/publish
 
+# Final image
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .

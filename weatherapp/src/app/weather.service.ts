@@ -7,6 +7,8 @@ import { CurrentWeatherModel, DailyForecastModel, LocationModel } from './weathe
 @Injectable({
   providedIn: 'root'
 })
+
+// Service to get the weather data from the API
 export class WeatherService {
 
   constructor(private http: HttpClient) { }

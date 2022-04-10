@@ -1,3 +1,5 @@
+// Interfaces used in services: represent the API response
+
 export interface LocationModel {
   city: string;
   state: string;

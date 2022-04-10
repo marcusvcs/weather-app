@@ -1,7 +1,7 @@
 ﻿namespace WeatherBackend.Model
 {
 
-
+    #region Classes generated from Copy JSON as Class
     public class DailyForecastModel
     {
         public Dailyforecast[]? DailyForecasts { get; set; }
@@ -38,7 +38,7 @@
         public int Icon { get; set; }
         public string? IconPhrase { get; set; }
     }
-
+    #endregion
 
 
 }

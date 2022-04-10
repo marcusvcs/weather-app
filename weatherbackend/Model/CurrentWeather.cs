@@ -1,6 +1,6 @@
 ﻿namespace WeatherBackend.Model
 {
-
+    #region Classes generated from Copy JSON as Class
     public class CurrentWeather
     {
         public DateTime LocalObservationDateTime { get; set; }
@@ -43,7 +43,11 @@
         public Metric? Metric { get; set; }
         public Imperial? Imperial { get; set; }
     }
-
+    #endregion
+    
+    /// <summary>
+    /// Class that is returned by the API /currentweather
+    /// </summary>
     public class CurrentWeatherModel
     {
         public DateTime LocalObservationDateTime { get; set; }

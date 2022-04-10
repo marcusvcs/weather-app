@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
       this.metricOrImperial = "metric";
     }
 
-    
+    // Get current location, then call all APIs.
     this.geolocation$.pipe(take(1)).subscribe(position => {
 
       this.weatherService.getLocation(position.coords.latitude, position.coords.longitude).subscribe(loc => {
@@ -46,14 +46,11 @@ export class AppComponent implements OnInit {
 
       });
     });
-    
-
-    //this.setUnits();
-    //this.convertUnits(true);
 
   }
-  title = 'Weather on your City';
+  title = 'Weather in your City';
 
+  //Methods to convert units. I decided to do this way to have a faster response
   public changeToCelsius() {
     let previousMetricOrImperial = localStorage.getItem('metricOrImperial');
     if (previousMetricOrImperial == "imperial") {

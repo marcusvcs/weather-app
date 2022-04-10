@@ -7,16 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+// DI
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IWeatherService, WeatherService>();
-
-builder.Services.AddCors(options => {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-                      policy => {
-                          policy.WithOrigins("https://localhost:4200"
-                                              );
-                      });
-});
 
 var app = builder.Build();
 
@@ -25,13 +18,25 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    // CORS configuration needed in development
+    builder.Services.AddCors(options => {
+        options.AddPolicy(name: MyAllowSpecificOrigins,
+                          policy => {
+                              policy.WithOrigins("https://localhost:4200"
+                                                  );
+                          });
+    });
 }
 
 //Will be configured outside the application
 //app.UseHttpsRedirection();
 
 app.UseCors(MyAllowSpecificOrigins);
+
+// Needed to embbed the Angular application in production
 app.UseFileServer();
+
+#region API declarations
 
 
 app.MapGet("/currentweather", async (string locationKey, IWeatherService weatherService) => {
@@ -56,5 +61,7 @@ app.MapGet("/dailyforecast", async (string locationKey, IWeatherService weatherS
     return dailyForecast;
 })
 .WithName("GetDailyForecast");
+#endregion
 
 app.Run();
+
