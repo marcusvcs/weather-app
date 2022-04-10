@@ -1,0 +1,1 @@
+cd weatherbackend && docker build -t weather -f Dockerfile .. && cd ..

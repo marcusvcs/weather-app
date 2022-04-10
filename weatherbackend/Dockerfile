@@ -11,6 +11,7 @@ WORKDIR /app
 COPY ./weatherapp/package.json /app
 RUN npm install
 COPY ./weatherapp /app
+RUN rm src/proxy.conf.js
 RUN npm run build --prod
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build

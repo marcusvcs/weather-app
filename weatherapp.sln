@@ -5,7 +5,15 @@ VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "weatherapp", "weatherapp\weatherapp.esproj", "{995E45F7-D1CC-4203-B71D-E9000A04ABA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "weatherbackend", "weatherbackend\weatherbackend.csproj", "{BF1728F1-68AB-4E7C-8B65-2413D0D0796B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "weatherbackend", "weatherbackend\weatherbackend.csproj", "{BF1728F1-68AB-4E7C-8B65-2413D0D0796B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2E37273B-3393-459E-9933-9A839A7F322B}"
+	ProjectSection(SolutionItems) = preProject
+		build.cmd = build.cmd
+		.github\workflows\main.yml = .github\workflows\main.yml
+		README.md = README.md
+		run.cmd = run.cmd
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
